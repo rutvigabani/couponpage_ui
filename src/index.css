@@ -20,3 +20,25 @@ code {
 .right-span{
   float: right;
 }
+.date-div{
+  display: flex;
+  flex-direction: row;
+}
+.date-picker{
+  width: 258px;
+}
+.button-style{
+  margin-left: 33em;
+  margin-top: 1em;
+  
+}
+.option-style{
+  font-size: medium;
+}
+.test-date .css-1u3bzj6-MuiFormControl-root-MuiTextField-root{
+  width: 265px !important;
+  /* background-color: red; */
+}
+::placeholder{
+  font-size: 14px;
+}

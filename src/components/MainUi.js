@@ -11,10 +11,16 @@ import {
   Divider,
   Select,
   MenuItem,
+  TextField,
+  Stack,
+  Grid,
 } from "@mui/material";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { CheckBox } from "@mui/icons-material";
@@ -115,6 +121,7 @@ const rows = [
 
 export const MainUi = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   const drawerOpen = () => {
     setAnchorEl(false);
     setIsDrawerOpen(true);
@@ -128,6 +135,8 @@ export const MainUi = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const [value, setValue] = useState(null);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -163,17 +172,34 @@ export const MainUi = () => {
             //     horizontal: 'right',
             //   }}
           >
-            <Button sx={{ fontSize: "15px" }} onClick={drawerOpen}>
+            <Button
+              sx={{
+                fontSize: "14px",
+                color: "black",
+              }}
+              onClick={drawerOpen}
+            > 
               Add Code
             </Button>
-
             <Divider sx={{ my: 0.5 }} />
-            <Typography sx={{ p: 2, marginTop: "-10px", fontSize: "15px" }}>
+            <Button
+              sx={{
+                fontSize: "14px",
+                color: "black",
+              }}
+            >
               Export to PDF
-            </Typography>
-            <Typography sx={{ p: 2, marginTop: "-20px", fontSize: "15px" }}>
+            </Button>
+            <br />
+            <Button
+              sx={{
+                fontSize: "14px",
+                color: "black",
+              }}
+            >
               Export to Excel
-            </Typography>
+            </Button>
+            
           </Popover>
           <Drawer
             anchor="right"
@@ -191,12 +217,152 @@ export const MainUi = () => {
               <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
                 Discount type
               </Typography>
-              <Select size="small" placeholder="Please Select..." width="100">
-                <MenuItem>Please Select...</MenuItem>
-                <MenuItem>Redeemables</MenuItem>
-                <MenuItem>Percentage</MenuItem>
-              </Select>
-              {/* <CheckBox>efe</CheckBox> */}
+              <select
+                style={{
+                  marginTop: "5px",
+                  width: "50em",
+                  height: "38px",
+                  fontSize: "14px",
+                  borderColor: "rgba(0,0,0,.08)",
+                  color: "#424242",
+                  borderRadius: "5px",
+                }}
+              >
+                <option className="option-style">Please select...</option>
+                <option>Redeemables</option>
+                <option>Percentage</option>
+              </select>
+              <Grid container style={{ marginTop: "10px" }}>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                    Start Date
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                    Expiry Date
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: "5px" }}>
+                <Grid item xs={6} style={{ width: "400px" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      PopperProps={{
+                        className: "test-date",
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} size="small" />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xs={6} style={{ width: "400px" }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      value={value}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} size="small" />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: "10px" }}>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                    Package
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                    Code
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: "5px" }}>
+                <Grid item xs={6}>
+                  <select
+                    style={{
+                      width: "332px",
+                      height: "39px",
+                      fontSize: "14px",
+                      borderColor: "rgba(0,0,0,.08)",
+                      color: "#424242",
+                      borderRadius: "5px",
+                    }}
+                  >
+                    <option className="option-style">Please select...</option>
+                    <option>Basic</option>
+                  </select>
+                  <p
+                    style={{ color: "rgba(0, 0, 0, 0.6)", fontSize: "0.80em" }}
+                  >
+                    Which package to make the code available for.
+                  </p>
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    style={{ width: "350px", borderColor: "rgba(0,0,0,.08)" }}
+                    size="small"
+                    placeholder="Enter Code"
+                  ></TextField>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: "10px" }}>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                    Quantity
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                    Discount
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Grid container style={{ marginTop: "5px" }}>
+                <Grid item xs={6}>
+                  <TextField
+                    style={{ width: "330px" }}
+                    size="small"
+                    placeholder="Enter Quantity"
+                    helperText="How many time the code can be used."
+                  ></TextField>
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    style={{ width: "350px" }}
+                    size="small"
+                    placeholder="Discount"
+                    helperText="Choose a discount for the code"
+                  ></TextField>
+                </Grid>
+              </Grid>
+              <Divider sx={{ marginTop: "10em" }} />
+              <div className="button-style">
+                <Button
+                  sx={{ color: "black" }}
+                  variant="outlined"
+                  onClick={() => setIsDrawerOpen(false)}
+                >
+                  Close
+                </Button>
+                <Button
+                  sx={{ marginLeft: "15px" }}
+                  variant="contained"
+                  color="secondary"
+                >
+                  Add
+                </Button>
+              </div>
             </Box>
           </Drawer>
         </span>
