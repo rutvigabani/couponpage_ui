@@ -1,12 +1,10 @@
-import './App.css';
-import { MainUi } from './components/MainUi';
-// import { MuiMenu } from './components/MuiMenu';
+import "./App.css";
+import { MainUi } from "./components/MainUi";
 
 function App() {
   return (
-    <div >
-      <MainUi/>
-      {/* <MuiMenu/> */}
+    <div>
+      <MainUi />
     </div>
   );
 }
