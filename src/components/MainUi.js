@@ -12,6 +12,7 @@ import {
   TextField,
   Grid,
 } from "@mui/material";
+import { useForm } from "react-hook-form";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -20,318 +21,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { AlarmAddRounded } from "@mui/icons-material";
-
-const CustomStatusCell = () => {
-  return (
-    <FormGroup>
-      <FormControlLabel control={<Switch defaultChecked />} />
-    </FormGroup>
-  );
-};
-const CustomActionCell = (props) => {
-  // const handleEditDrawer=()=>{
-  // console.log(33, props.row);
-  // }
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const drawerOpen = () => {
-    setIsDrawerOpen(true);
-  };
-
-  return (
-    <>
-      <div>
-        <BorderColorOutlinedIcon
-          sx={{ fontSize: 20 }}
-          onClick={drawerOpen}
-          // onClick={handleEditDrawer}
-        ></BorderColorOutlinedIcon>
-        <Drawer
-          anchor="right"
-          open={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
-        >
-          <Box p={3} width="700px" role="presentation">
-            <Typography
-              sx={{ fontSize: "20px", fontWeight: "bold" }}
-              variant="h5"
-            >
-              Edit Coupon Code
-            </Typography>
-            <Divider sx={{ my: 1.5 }} />
-            <form>
-              {/* {rows.map((data) => {
-                return (
-                  <> */}
-              <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                Discount type
-              </Typography>
-              <select
-                value={props.row.discounttype}
-                style={{
-                  marginTop: "5px",
-                  width: "50em",
-                  height: "38px",
-                  fontSize: "14px",
-                  borderColor: "rgba(0,0,0,.08)",
-                  color: "#424242",
-                  borderRadius: "5px",
-                }}
-                // name="discounttype"
-                // onChange={onChange}
-                // value={coupon.discounttype}
-              >
-                <option className="option-style">Please select...</option>
-                <option value="Redeemables">Redeemables</option>
-                <option value="Percentage">Percentage</option>
-              </select>
-              <Grid container style={{ marginTop: "10px" }}>
-                <Grid item xs={6}>
-                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                    Start Date
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                    Expiry Date
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: "5px" }}>
-                <Grid item xs={6} style={{ width: "400px" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      value={props.row.startdate}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField {...params} size="small" />
-                      )}
-                    />
-                  </LocalizationProvider>
-                  {/* <TextField
-                      style={{ width: "20.6em" }}
-                      size="small"
-                      onChange={onChange}
-                      name="startdate"
-                      value="coupon.startdate"
-                      type="date"
-                      id="date"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    ></TextField> */}
-                </Grid>
-                <Grid item xs={6} style={{ width: "400px" }}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DatePicker
-                      value={props.row.expirydate}
-                      onChange={(newValue) => {
-                        setValue(newValue);
-                      }}
-                      renderInput={(params) => (
-                        <TextField {...params} size="small" />
-                      )}
-                    />
-                  </LocalizationProvider>
-                  {/* <TextField
-                      style={{ width: "22em" }}
-                      size="small"
-                      onChange={onChange}
-                      name="expirydate"
-                      value="coupon.expirydate"
-                      type="date"
-                      id="date"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    ></TextField> */}
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: "10px" }}>
-                <Grid item xs={6}>
-                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                    Package
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                    Code
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: "5px" }}>
-                <Grid item xs={6}>
-                  <select
-                    value={props.row.pakage}
-                    style={{
-                      width: "332px",
-                      height: "39px",
-                      fontSize: "14px",
-                      borderColor: "rgba(0,0,0,.08)",
-                      color: "#424242",
-                      borderRadius: "5px",
-                    }}
-                    // onChange={onChange}
-                    // name="package"
-                    // value={coupon.package}
-                  >
-                    <option className="option-style">Please select...</option>
-                    <option>Basic</option>
-                  </select>
-                  <p
-                    style={{
-                      color: "rgba(0, 0, 0, 0.6)",
-                      fontSize: "0.80em",
-                    }}
-                  >
-                    Which package to make the code available for.
-                  </p>
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    style={{
-                      width: "350px",
-                      borderColor: "rgba(0,0,0,.08)",
-                    }}
-                    size="small"
-                    placeholder="Enter Code"
-                    value={props.row.couponcode}
-                    // onChange={onChange}
-                    // name="code"
-                    // value={coupon.code}
-                  ></TextField>
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: "10px" }}>
-                <Grid item xs={6}>
-                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                    Quantity
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
-                    Discount
-                  </Typography>
-                </Grid>
-              </Grid>
-              <Grid container style={{ marginTop: "5px" }}>
-                <Grid item xs={6}>
-                  <TextField
-                    value={props.row.quantity}
-                    style={{ width: "330px" }}
-                    size="small"
-                    // onChange={onChange}
-                    // name="quantity"
-                    // value={coupon.quantity}
-                    placeholder="Enter Quantity"
-                    helperText="How many time the code can be used."
-                  ></TextField>
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    value={props.row.discount}
-                    style={{ width: "350px" }}
-                    size="small"
-                    // onChange={onChange}
-                    // name="discount"
-                    // value={coupon.discount}
-                    placeholder="Discount"
-                    helperText="Choose a discount for the code"
-                  ></TextField>
-                </Grid>
-              </Grid>
-              {/* </>
-                );
-              })} */}
-              <Divider sx={{ marginTop: "8em" }} />
-              <div className="button-style">
-                <Button
-                  sx={{ color: "black" }}
-                  variant="outlined"
-                  onClick={() => setIsDrawerOpen(false)}
-                >
-                  Close
-                </Button>
-                <Button
-                  sx={{ marginLeft: "5px" }}
-                  variant="contained"
-                  color="secondary"
-                  // onClick={handleAdd}
-                >
-                  Update
-                </Button>
-              </div>
-            </form>
-          </Box>
-        </Drawer>
-      </div>
-      <div>
-        <DeleteOutlineOutlinedIcon
-          sx={{ padding: 2 }}
-          color="error"
-        ></DeleteOutlineOutlinedIcon>
-      </div>
-    </>
-  );
-};
-const columns = [
-  // { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: "couponcode",
-    headerName: "COUPON CODE",
-    type: "number",
-    width: 130,
-    //   editable: true,
-  },
-  {
-    field: "discounttype",
-    headerName: "DISCOUNT TYPE",
-    width: 150,
-    //   editable: true,
-  },
-  {
-    field: "pakage",
-    headerName: "PACKAGE",
-    width: 120,
-    //   width: 110,
-    //   editable: true,
-  },
-  {
-    field: "discount",
-    headerName: "DISCOUNT",
-    width: 120,
-  },
-  {
-    field: "quantity",
-    headerName: "QUANTITY",
-    type: "number",
-    width: 100,
-  },
-  {
-    field: "startdate",
-    headerName: "START DATE",
-    width: 160,
-  },
-  {
-    field: "expirydate",
-    headerName: "EXPIRY DATE",
-    width: 170,
-  },
-  {
-    field: "status",
-    headerName: "STATUS",
-    width: 140,
-    renderCell: CustomStatusCell,
-  },
-  {
-    field: "actions",
-    headerName: "ACTIONS",
-    renderCell: CustomActionCell,
-  },
-];
 
 // const rows = [
 //   {
@@ -383,26 +72,344 @@ export const MainUi = () => {
   ]);
   const [coupon, setcoupon] = useState({
     discounttype: "",
-    // startdate: "",
-    // expirydate: "",
+    startdate: "",
+    expirydate: "",
     pakage: "",
     couponcode: "",
     quantity: "",
     discount: "",
     id: couponArray.length + 1,
   });
+
+  const CustomStatusCell = () => {
+    return (
+      <FormGroup>
+        <FormControlLabel control={<Switch defaultChecked />} />
+      </FormGroup>
+    );
+  };
+  const CustomActionCell = (props) => {
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+    const drawerOpen = () => {
+      setEditData(props.row);
+      setIsDrawerOpen(true);
+    };
+
+    const [editData, setEditData] = useState([]);
+
+    const onChangeEdit = (e) => {
+      setEditData({ ...editData, [e.target.name]: e.target.value });
+    };
+
+    const handleEdit = (data) => {
+      console.log("data", data);
+      console.log("couponArray", couponArray);
+
+      let currentIndex = couponArray.findIndex((e) => e.id === data.id);
+      console.log("55", currentIndex);
+
+      if (currentIndex > -1) {
+        console.log("first", couponArray);
+
+        let newArr = [...couponArray];
+
+        console.log("newArr", newArr);
+
+        newArr[currentIndex] = data;
+        setcouponArray(newArr);
+        // console.log("61", editData);
+      }
+      setIsDrawerOpen(false);
+    };
+
+    const [value, setValue] = useState(null);
+    return (
+      <>
+        <div>
+          <BorderColorOutlinedIcon
+            sx={{ fontSize: 20 }}
+            onClick={drawerOpen}
+          ></BorderColorOutlinedIcon>
+
+          <Drawer
+            anchor="right"
+            open={isDrawerOpen}
+            onClose={() => setIsDrawerOpen(false)}
+          >
+            <Box p={3} width="700px" role="presentation">
+              <Typography
+                sx={{ fontSize: "20px", fontWeight: "bold" }}
+                variant="h5"
+              >
+                Edit Coupon Code
+              </Typography>
+              <Divider sx={{ my: 1.5 }} />
+              <form>
+                <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                  Discount type
+                </Typography>
+                <select
+                  style={{
+                    marginTop: "5px",
+                    width: "50em",
+                    height: "38px",
+                    fontSize: "14px",
+                    borderColor: "rgba(0,0,0,.08)",
+                    color: "#424242",
+                    borderRadius: "5px",
+                  }}
+                  name="discounttype"
+                  value={editData.discounttype}
+                  onChange={onChangeEdit}
+                >
+                  <option className="option-style">Please select...</option>
+                  <option value="Redeemables">Redeemables</option>
+                  <option value="Percentage">Percentage</option>
+                </select>
+                <Grid container style={{ marginTop: "10px" }}>
+                  <Grid item xs={6}>
+                    <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                      Start Date
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                      Expiry Date
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginTop: "5px" }}>
+                  <Grid item xs={6} style={{ width: "400px" }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        value={editData.startdate}
+                        onChange={(newValue) => {
+                          setValue(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                  <Grid item xs={6} style={{ width: "400px" }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        value={editData.expirydate}
+                        onChange={(newValue) => {
+                          setValue(newValue);
+                        }}
+                        renderInput={(params) => (
+                          <TextField {...params} size="small" />
+                        )}
+                      />
+                    </LocalizationProvider>
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginTop: "10px" }}>
+                  <Grid item xs={6}>
+                    <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                      Package
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                      Code
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginTop: "5px" }}>
+                  <Grid item xs={6}>
+                    <select
+                      value={editData.pakage}
+                      style={{
+                        width: "332px",
+                        height: "39px",
+                        fontSize: "14px",
+                        borderColor: "rgba(0,0,0,.08)",
+                        color: "#424242",
+                        borderRadius: "5px",
+                      }}
+                      name="package"
+                      onChange={onChangeEdit}
+                    >
+                      <option className="option-style">Please select...</option>
+                      <option>Basic</option>
+                    </select>
+                    <p
+                      style={{
+                        color: "rgba(0, 0, 0, 0.6)",
+                        fontSize: "0.80em",
+                      }}
+                    >
+                      Which package to make the code available for.
+                    </p>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      style={{
+                        width: "350px",
+                        borderColor: "rgba(0,0,0,.08)",
+                      }}
+                      size="small"
+                      placeholder="Enter Code"
+                      value={editData.couponcode}
+                      name="couponcode"
+                      onChange={onChangeEdit}
+                    ></TextField>
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginTop: "10px" }}>
+                  <Grid item xs={6}>
+                    <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                      Quantity
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
+                      Discount
+                    </Typography>
+                  </Grid>
+                </Grid>
+                <Grid container style={{ marginTop: "5px" }}>
+                  <Grid item xs={6}>
+                    <TextField
+                      value={editData.quantity}
+                      style={{ width: "330px" }}
+                      size="small"
+                      onChange={onChangeEdit}
+                      name="quantity"
+                      placeholder="Enter Quantity"
+                      helperText="How many time the code can be used."
+                    ></TextField>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      value={editData.discount}
+                      style={{ width: "350px" }}
+                      size="small"
+                      onChange={onChangeEdit}
+                      name="discount"
+                      placeholder="Discount"
+                      helperText="Choose a discount for the code"
+                    ></TextField>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ marginTop: "8em" }} />
+                <div className="button-style">
+                  <Button
+                    sx={{ color: "black" }}
+                    variant="outlined"
+                    onClick={() => setIsDrawerOpen(false)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    sx={{ marginLeft: "5px" }}
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleEdit(editData)}
+                  >
+                    Update
+                  </Button>
+                </div>
+              </form>
+            </Box>
+          </Drawer>
+        </div>
+        <div>
+          <DeleteOutlineOutlinedIcon
+            sx={{ padding: 2 }}
+            color="error"
+          ></DeleteOutlineOutlinedIcon>
+        </div>
+      </>
+    );
+  };
+  const columns = [
+    // { field: 'id', headerName: 'ID', width: 90 },
+    {
+      field: "couponcode",
+      headerName: "COUPON CODE",
+      type: "number",
+      width: 130,
+      //   editable: true,
+    },
+    {
+      field: "discounttype",
+      headerName: "DISCOUNT TYPE",
+      width: 150,
+      //   editable: true,
+    },
+    {
+      field: "pakage",
+      headerName: "PACKAGE",
+      width: 120,
+      //   width: 110,
+      //   editable: true,
+    },
+    {
+      field: "discount",
+      headerName: "DISCOUNT",
+      width: 120,
+    },
+    {
+      field: "quantity",
+      headerName: "QUANTITY",
+      type: "number",
+      width: 100,
+    },
+    {
+      field: "startdate",
+      headerName: "START DATE",
+      width: 160,
+    },
+    {
+      field: "expirydate",
+      headerName: "EXPIRY DATE",
+      width: 170,
+    },
+    {
+      field: "status",
+      headerName: "STATUS",
+      width: 140,
+      renderCell: CustomStatusCell,
+    },
+    {
+      field: "actions",
+      headerName: "ACTIONS",
+      renderCell: CustomActionCell,
+    },
+  ];
+
   const onChange = (e) => {
     setcoupon({ ...coupon, [e.target.name]: e.target.value });
   };
 
-  console.log(384, couponArray);
+  // console.log(398, couponArray);
   const saveCoupon = (newValue) => {
     setcouponArray([...couponArray, newValue]);
   };
 
   const handleAdd = (e) => {
     e.preventDefault();
-    saveCoupon({ ...coupon });
+
+    const couponData = { ...coupon, id: couponArray?.length + 1 };
+
+    console.log("coupon", couponData);
+    setcouponArray([...couponArray, { ...couponData }]);
+    setIsDrawerOpen(false);
+    setcoupon({
+      discounttype: "",
+      startdate: "",
+      expirydate: "",
+      pakage: "",
+      couponcode: "",
+      quantity: "",
+      discount: "",
+    });
   };
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -420,7 +427,8 @@ export const MainUi = () => {
     setAnchorEl(null);
   };
 
-  const [value, setValue] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  // console.log(433, coupon);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -451,10 +459,6 @@ export const MainUi = () => {
               vertical: "bottom",
               horizontal: "left",
             }}
-            // transformOrigin={{
-            //     vertical: 'top',
-            //     horizontal: 'right',
-            //   }}
           >
             <Button
               sx={{
@@ -465,6 +469,7 @@ export const MainUi = () => {
             >
               Add Code
             </Button>
+
             <Divider sx={{ my: 0.5 }} />
             <Button
               sx={{
@@ -535,52 +540,34 @@ export const MainUi = () => {
                   <Grid item xs={6} style={{ width: "400px" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        value={value}
+                        value={coupon.startdate}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setcoupon({
+                            ...coupon,
+                            startdate: newValue.$d.toLocaleDateString(),
+                          });
                         }}
                         renderInput={(params) => (
                           <TextField {...params} size="small" />
                         )}
                       />
                     </LocalizationProvider>
-                    {/* <TextField
-                      style={{ width: "20.6em" }}
-                      size="small"
-                      onChange={onChange}
-                      name="startdate"
-                      value="coupon.startdate"
-                      type="date"
-                      id="date"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    ></TextField> */}
                   </Grid>
                   <Grid item xs={6} style={{ width: "400px" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        value={value}
+                        value={coupon.expirydate}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setcoupon({
+                            ...coupon,
+                            expirydate: newValue.$d.toLocaleDateString(),
+                          });
                         }}
                         renderInput={(params) => (
                           <TextField {...params} size="small" />
                         )}
                       />
                     </LocalizationProvider>
-                    {/* <TextField
-                      style={{ width: "22em" }}
-                      size="small"
-                      onChange={onChange}
-                      name="expirydate"
-                      value="coupon.expirydate"
-                      type="date"
-                      id="date"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                    ></TextField> */}
                   </Grid>
                 </Grid>
                 <Grid container style={{ marginTop: "10px" }}>
@@ -670,7 +657,7 @@ export const MainUi = () => {
                   </Grid>
                 </Grid>
 
-                <Divider sx={{ marginTop: "10em" }} />
+                <Divider sx={{ marginTop: "9em" }} />
                 <div className="button-style">
                   <Button
                     sx={{ color: "black" }}
