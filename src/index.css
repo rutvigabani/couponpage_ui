@@ -42,3 +42,6 @@ code {
 ::placeholder{
   font-size: 14px;
 }
+.MuiFormHelperText-root {
+  color: red !important;
+}

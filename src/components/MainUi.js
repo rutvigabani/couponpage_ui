@@ -22,42 +22,15 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 
-// const rows = [
-//   {
-//     id: 1,
-//     couponcode: 310,
-//     discounttype: "Redeemables",
-//     pakage: "Basic",
-//     discount: "20",
-//     quantity: 2,
-//     startdate: "05/12/2022",
-//     expirydate: "06/12/2022",
-//   },
-//   {
-//     id: 2,
-//     couponcode: 410,
-//     discounttype: "Redeemables",
-//     pakage: "Basic",
-//     discount: "100",
-//     quantity: 2,
-//     startdate: "10/12/2023",
-//     expirydate: "10/16/2023",
-//   },
-//   {
-//     id: 3,
-//     couponcode: 100,
-//     discounttype: "Percentage",
-//     pakage: "Basic",
-//     discount: "300",
-//     quantity: 4,
-//     startdate: "04/09/2024",
-//     expirydate: "04/20/202",
-//   },
-
-//   // { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 }
-// ];
-
 export const MainUi = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => console.log(data);
+  // console.log(errors);
+
   const [couponArray, setcouponArray] = useState([
     {
       id: 0,
@@ -103,27 +76,17 @@ export const MainUi = () => {
     };
 
     const handleEdit = (data) => {
-      console.log("data", data);
-      console.log("couponArray", couponArray);
-
       let currentIndex = couponArray.findIndex((e) => e.id === data.id);
-      console.log("55", currentIndex);
 
       if (currentIndex > -1) {
-        console.log("first", couponArray);
-
         let newArr = [...couponArray];
-
-        console.log("newArr", newArr);
 
         newArr[currentIndex] = data;
         setcouponArray(newArr);
-        // console.log("61", editData);
       }
       setIsDrawerOpen(false);
     };
 
-    const [value, setValue] = useState(null);
     return (
       <>
         <div>
@@ -185,7 +148,10 @@ export const MainUi = () => {
                       <DatePicker
                         value={editData.startdate}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setEditData({
+                            ...editData,
+                            startdate: newValue.$d.toLocaleDateString(),
+                          });
                         }}
                         renderInput={(params) => (
                           <TextField {...params} size="small" />
@@ -198,7 +164,10 @@ export const MainUi = () => {
                       <DatePicker
                         value={editData.expirydate}
                         onChange={(newValue) => {
-                          setValue(newValue);
+                          setEditData({
+                            ...editData,
+                            expirydate: newValue.$d.toLocaleDateString(),
+                          });
                         }}
                         renderInput={(params) => (
                           <TextField {...params} size="small" />
@@ -237,14 +206,6 @@ export const MainUi = () => {
                       <option className="option-style">Please select...</option>
                       <option>Basic</option>
                     </select>
-                    <p
-                      style={{
-                        color: "rgba(0, 0, 0, 0.6)",
-                        fontSize: "0.80em",
-                      }}
-                    >
-                      Which package to make the code available for.
-                    </p>
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
@@ -281,7 +242,7 @@ export const MainUi = () => {
                       onChange={onChangeEdit}
                       name="quantity"
                       placeholder="Enter Quantity"
-                      helperText="How many time the code can be used."
+                      // helperText="How many time the code can be used."
                     ></TextField>
                   </Grid>
                   <Grid item xs={6}>
@@ -292,7 +253,7 @@ export const MainUi = () => {
                       onChange={onChangeEdit}
                       name="discount"
                       placeholder="Discount"
-                      helperText="Choose a discount for the code"
+                      // helperText="Choose a discount for the code"
                     ></TextField>
                   </Grid>
                 </Grid>
@@ -417,7 +378,7 @@ export const MainUi = () => {
     setAnchorEl(false);
     setIsDrawerOpen(true);
   };
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -426,9 +387,6 @@ export const MainUi = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const [selectedDate, setSelectedDate] = useState(null);
-  // console.log(433, coupon);
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
@@ -501,8 +459,9 @@ export const MainUi = () => {
               >
                 Add Coupon Code
               </Typography>
+
               <Divider sx={{ my: 1.5 }} />
-              <form>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
                   Discount type
                 </Typography>
@@ -519,6 +478,11 @@ export const MainUi = () => {
                   name="discounttype"
                   onChange={onChange}
                   value={coupon.discounttype}
+                  // {...register("discounttype", {
+                  //   required: "discount type is required.",
+                  // })}
+                  // helperText={errors.discounttype?.message}
+                  // error={Boolean(errors.discounttype)}
                 >
                   <option className="option-style">Please select...</option>
                   <option value="Redeemables">Redeemables</option>
@@ -596,18 +560,14 @@ export const MainUi = () => {
                       onChange={onChange}
                       name="pakage"
                       value={coupon.pakage}
+                      // {...register("pakage", {
+                      //   required: "package is required",
+                      // })}
+                      // helperText={errors.pakage?.message}
                     >
                       <option className="option-style">Please select...</option>
                       <option value="Basic">Basic</option>
                     </select>
-                    <p
-                      style={{
-                        color: "rgba(0, 0, 0, 0.6)",
-                        fontSize: "0.80em",
-                      }}
-                    >
-                      Which package to make the code available for.
-                    </p>
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
@@ -617,6 +577,10 @@ export const MainUi = () => {
                       onChange={onChange}
                       name="couponcode"
                       value={coupon.couponcode}
+                      // {...register("couponcode", {
+                      //   required: "Code is required.",
+                      // })}
+                      // helperText={errors.couponcode?.message}
                     ></TextField>
                   </Grid>
                 </Grid>
@@ -640,19 +604,26 @@ export const MainUi = () => {
                       onChange={onChange}
                       name="quantity"
                       value={coupon.quantity}
-                      placeholder="Enter Quantity"
-                      helperText="How many time the code can be used."
+                      // placeholder="Enter Quantity"
+                      // {...register("quantity", {
+                      //   required: "quantity is required.",
+                      // })}
+                      // helperText={errors.quantity?.message}
                     ></TextField>
                   </Grid>
                   <Grid item xs={6}>
                     <TextField
+                      id="discount"
                       style={{ width: "350px", borderColor: "red" }}
                       size="small"
                       onChange={onChange}
                       name="discount"
                       value={coupon.discount}
                       placeholder="Discount"
-                      helperText="Choose a discount for the code"
+                      {...register("discount", {
+                        required: "discount is required.",
+                      })}
+                      helperText={errors.discount?.message}
                     ></TextField>
                   </Grid>
                 </Grid>
@@ -670,6 +641,7 @@ export const MainUi = () => {
                     sx={{ marginLeft: "15px" }}
                     variant="contained"
                     color="secondary"
+                    type="submit"
                     onClick={handleAdd}
                   >
                     Add
