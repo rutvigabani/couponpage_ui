@@ -27,9 +27,26 @@ export const MainUi = () => {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
-  const onSubmit = (data) => console.log(data);
-  // console.log(errors);
+  const onSubmit = (data) => {
+    const couponData = { ...coupon, id: couponArray?.length + 1 };
+
+    console.log("coupon", data);
+    setcouponArray([...couponArray, { ...data, id: couponArray?.length + 1 }]);
+    setIsDrawerOpen(false);
+    setcoupon({
+      discounttype: "",
+      startdate: "",
+      expirydate: "",
+      pakage: "",
+      couponcode: "",
+      quantity: "",
+      discount: "",
+    });
+  };
+  const [startdatevalue, setStartdateValue] = useState(null);
+  const [expirydatevalue, setExpirydateValue] = useState(null);
 
   const [couponArray, setcouponArray] = useState([
     {
@@ -37,7 +54,7 @@ export const MainUi = () => {
       couponcode: 310,
       discounttype: "Redeemables",
       pakage: "Basic",
-      discount: "20",
+      discount: 20,
       quantity: 2,
       startdate: "05/12/2022",
       expirydate: "06/12/2022",
@@ -146,6 +163,7 @@ export const MainUi = () => {
                   <Grid item xs={6} style={{ width: "400px" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
+                        name="startdate"
                         value={editData.startdate}
                         onChange={(newValue) => {
                           setEditData({
@@ -162,6 +180,7 @@ export const MainUi = () => {
                   <Grid item xs={6} style={{ width: "400px" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
+                        name="expirydate"
                         value={editData.expirydate}
                         onChange={(newValue) => {
                           setEditData({
@@ -191,7 +210,6 @@ export const MainUi = () => {
                 <Grid container style={{ marginTop: "5px" }}>
                   <Grid item xs={6}>
                     <select
-                      value={editData.pakage}
                       style={{
                         width: "332px",
                         height: "39px",
@@ -200,11 +218,13 @@ export const MainUi = () => {
                         color: "#424242",
                         borderRadius: "5px",
                       }}
-                      name="package"
+                      name="pakage"
+                      value={editData.pakage}
                       onChange={onChangeEdit}
                     >
                       <option className="option-style">Please select...</option>
                       <option>Basic</option>
+                      <option>Premium</option>
                     </select>
                   </Grid>
                   <Grid item xs={6}>
@@ -349,34 +369,17 @@ export const MainUi = () => {
     setcoupon({ ...coupon, [e.target.name]: e.target.value });
   };
 
-  // console.log(398, couponArray);
   const saveCoupon = (newValue) => {
     setcouponArray([...couponArray, newValue]);
   };
 
-  const handleAdd = (e) => {
-    e.preventDefault();
-
-    const couponData = { ...coupon, id: couponArray?.length + 1 };
-
-    console.log("coupon", couponData);
-    setcouponArray([...couponArray, { ...couponData }]);
-    setIsDrawerOpen(false);
-    setcoupon({
-      discounttype: "",
-      startdate: "",
-      expirydate: "",
-      pakage: "",
-      couponcode: "",
-      quantity: "",
-      discount: "",
-    });
-  };
+  const handleAdd = (e) => {};
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const drawerOpen = () => {
     setAnchorEl(false);
     setIsDrawerOpen(true);
+    // setcoupon({});
   };
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -452,7 +455,7 @@ export const MainUi = () => {
             open={isDrawerOpen}
             onClose={() => setIsDrawerOpen(false)}
           >
-            <Box p={3} width="700px" role="presentation">
+            <Box p={3} width="700px">
               <Typography
                 sx={{ fontSize: "20px", fontWeight: "bold" }}
                 variant="h5"
@@ -476,11 +479,11 @@ export const MainUi = () => {
                     borderRadius: "5px",
                   }}
                   name="discounttype"
-                  onChange={onChange}
-                  value={coupon.discounttype}
-                  // {...register("discounttype", {
-                  //   required: "discount type is required.",
-                  // })}
+                  // value={coupon.discounttype}
+                  {...register("discounttype", {
+                    required: "discount type is required.",
+                  })}
+
                   // helperText={errors.discounttype?.message}
                   // error={Boolean(errors.discounttype)}
                 >
@@ -488,6 +491,7 @@ export const MainUi = () => {
                   <option value="Redeemables">Redeemables</option>
                   <option value="Percentage">Percentage</option>
                 </select>
+
                 <Grid container style={{ marginTop: "10px" }}>
                   <Grid item xs={6}>
                     <Typography sx={{ fontSize: "13px", fontWeight: "bold" }}>
@@ -504,12 +508,13 @@ export const MainUi = () => {
                   <Grid item xs={6} style={{ width: "400px" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        value={coupon.startdate}
+                        value={startdatevalue}
                         onChange={(newValue) => {
-                          setcoupon({
-                            ...coupon,
-                            startdate: newValue.$d.toLocaleDateString(),
-                          });
+                          setStartdateValue(newValue.$d.toLocaleDateString());
+                          setValue(
+                            "startdate",
+                            newValue.$d.toLocaleDateString()
+                          );
                         }}
                         renderInput={(params) => (
                           <TextField {...params} size="small" />
@@ -520,12 +525,13 @@ export const MainUi = () => {
                   <Grid item xs={6} style={{ width: "400px" }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                       <DatePicker
-                        value={coupon.expirydate}
+                        value={expirydatevalue}
                         onChange={(newValue) => {
-                          setcoupon({
-                            ...coupon,
-                            expirydate: newValue.$d.toLocaleDateString(),
-                          });
+                          setExpirydateValue(newValue.$d.toLocaleDateString());
+                          setValue(
+                            "expirydate",
+                            newValue.$d.toLocaleDateString()
+                          );
                         }}
                         renderInput={(params) => (
                           <TextField {...params} size="small" />
@@ -557,16 +563,16 @@ export const MainUi = () => {
                         color: "#424242",
                         borderRadius: "5px",
                       }}
-                      onChange={onChange}
                       name="pakage"
-                      value={coupon.pakage}
-                      // {...register("pakage", {
-                      //   required: "package is required",
-                      // })}
-                      // helperText={errors.pakage?.message}
+                      // value={coupon.pakage}
+                      {...register("pakage", {
+                        required: "package is required",
+                      })}
+                      helperText={errors.pakage?.message}
                     >
                       <option className="option-style">Please select...</option>
                       <option value="Basic">Basic</option>
+                      <option value="Premium">Premium</option>
                     </select>
                   </Grid>
                   <Grid item xs={6}>
@@ -574,13 +580,11 @@ export const MainUi = () => {
                       style={{ width: "350px", borderColor: "rgba(0,0,0,.08)" }}
                       size="small"
                       placeholder="Enter Code"
-                      onChange={onChange}
                       name="couponcode"
-                      value={coupon.couponcode}
-                      // {...register("couponcode", {
-                      //   required: "Code is required.",
-                      // })}
-                      // helperText={errors.couponcode?.message}
+                      {...register("couponcode", {
+                        required: "Code is required.",
+                      })}
+                      helperText={errors.couponcode?.message}
                     ></TextField>
                   </Grid>
                 </Grid>
@@ -601,14 +605,13 @@ export const MainUi = () => {
                     <TextField
                       style={{ width: "330px" }}
                       size="small"
-                      onChange={onChange}
                       name="quantity"
-                      value={coupon.quantity}
-                      // placeholder="Enter Quantity"
-                      // {...register("quantity", {
-                      //   required: "quantity is required.",
-                      // })}
-                      // helperText={errors.quantity?.message}
+                      // value={coupon.quantity}
+                      placeholder="Enter Quantity"
+                      {...register("quantity", {
+                        required: "quantity is required.",
+                      })}
+                      helperText={errors.quantity?.message}
                     ></TextField>
                   </Grid>
                   <Grid item xs={6}>
@@ -616,9 +619,7 @@ export const MainUi = () => {
                       id="discount"
                       style={{ width: "350px", borderColor: "red" }}
                       size="small"
-                      onChange={onChange}
                       name="discount"
-                      value={coupon.discount}
                       placeholder="Discount"
                       {...register("discount", {
                         required: "discount is required.",
@@ -642,7 +643,6 @@ export const MainUi = () => {
                     variant="contained"
                     color="secondary"
                     type="submit"
-                    onClick={handleAdd}
                   >
                     Add
                   </Button>
